@@ -1,0 +1,70 @@
+**Automated Backup System**
+
+An automated backup management system built with **Bash scripting**.  
+This tool helps you **automatically back up files, manage logs, and handle cleanup** tasks with simple commands and configuration.
+
+**Features**
+
+**Automated Backups** – Periodically backups your files or directories.  
+**Cleanup Mode** – Removes old backups automatically.  
+**Configurable Settings** – Uses a simple `backup.config` file for easy customization.  
+**Detailed Logs** – Stores logs in `backup.log` for tracking all operations.  
+**Lock File Mechanism** – Prevents concurrent backup runs.
+
+**Project Structure**
+
+backup-system/
+├── backup.sh
+├── backup.config
+└── README.md
+
+**Configuration**
+# backup.config
+SOURCE_DIRS="./test_data"
+BACKUP_DIR="./backups"
+LOG_FILE="./backup.log"
+RETENTION_DAYS=7
+
+**Explanation**:
+
+SOURCE_DIRS: Path(s) to directories or files you want to back up,
+BACKUP_DIR: Directory where backups are stored,
+LOG_FILE: Path to the backup log file,
+RETENTION_DAYS: Number of days to keep old backups before deletion.
+
+**How It Works**
+
+The backup.sh script performs the following steps:
+**Initialize Environment**:
+Loads configuration from backup.config.
+Creates necessary directories if they don’t exist.
+Generates a timestamp for unique backup names.
+**Perform Backup**:
+Copies all files/directories listed in SOURCE_DIRS to BACKUP_DIR.
+Compresses the backup into a .tar.gz archive.
+Logs all actions in backup.log.
+**Cleanup Mode**:
+If executed with the --cleanup flag, removes backups older than RETENTION_DAYS.
+**Lock Mechanism**:
+Uses /tmp/backup.lock to ensure only one backup runs at a time.
+
+**Usage**:
+Run the script from the terminal:
+# Run backup normally
+bash backup.sh
+# Run backup with cleanup mode
+bash backup.sh --cleanup
+
+**Example (Test Data Setup)**:
+You can test the script using the sample test data provided in the repository:
+
+mkdir -p test_data/documents test_data/media
+echo "Hello, Backup System!" > test_data/documents/notes.txt
+echo "Sample log data" > test_data/media/data.log
+
+**Then verify the structure:**
+ls -R test_data
+**Log**:
+All activities (successful backups, skipped files, cleanup events, etc.) are logged into backup.log.
+You can view them using:
+cat backup.log
